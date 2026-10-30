@@ -10,7 +10,8 @@ Speedtest ala Ookla yang jalan langsung di router MikroTik, murni pakai script R
 |------|----------|------------|
 | [`speedtest-rOSV7.rsc`](speedtest-rOSV7.rsc) | v7.13+ | Versi lengkap. Bisa pilih server otomatis dari speedtest.net, waktu diukur presisi mikrodetik pakai `:timestamp`. |
 | [`speedtest-rOSV6.rsc`](speedtest-rOSV6.rsc) | v6.43+ | Untuk router yang masih v6. Server wajib diisi manual, lihat [Beda versi v6](#beda-versi-v6). |
-| [`speedtest-quick-rOSV7.rsc`](speedtest-quick-rOSV7.rsc) | v7 | Tes download cepat, bisa langsung di-paste ke terminal. Lihat [Tes cepat](#tes-cepat-paste-langsung-ke-terminal-v7). |
+| [`speedtest-quick-rOSV7.rsc`](speedtest-quick-rOSV7.rsc) | v7 | Tes download cepat, bisa langsung di-paste ke terminal. Lihat [Tes cepat](#tes-cepat-paste-langsung-ke-terminal). |
+| [`speedtest-quick-rOSV6.rsc`](speedtest-quick-rOSV6.rsc) | v6 | Sama seperti di atas, untuk RouterOS v6. |
 
 Cek versi router:
 
@@ -57,9 +58,11 @@ Idle Latency:     12.34 ms   (jitter: 0.85ms, low: 11.20ms, high: 14.10ms)
 
 Selama tes berjalan, progress bar dengan spinner diperbarui terus di terminal. Hasil akhirnya juga dicatat ke **Log** (`speedtest: ping ..., download ..., upload ...`).
 
-### Tes cepat: paste langsung ke terminal (v7)
+### Tes cepat: paste langsung ke terminal
 
-Cuma mau cek kecepatan download sekilas tanpa pasang script? Paste blok ini langsung ke **New Terminal** atau SSH. Isinya juga ada di [`speedtest-quick-rOSV7.rsc`](speedtest-quick-rOSV7.rsc).
+Cuma mau cek kecepatan download sekilas tanpa pasang script? Paste blok sesuai versi RouterOS langsung ke **New Terminal** atau SSH.
+
+**RouterOS v7** ([`speedtest-quick-rOSV7.rsc`](speedtest-quick-rOSV7.rsc)):
 
 ```
 {
@@ -77,7 +80,27 @@ Cuma mau cek kecepatan download sekilas tanpa pasang script? Paste blok ini lang
 }
 ```
 
-Contoh hasil:
+**RouterOS v6** ([`speedtest-quick-rOSV6.rsc`](speedtest-quick-rOSV6.rsc)):
+
+```
+{
+:local host "jakarta2.speedtest.telkom.net.id:8080"
+:local size 100000000
+:local toSec do={ :local t [:tostr $1]; :return ((([:tonum [:pick $t 0 2]] * 3600) + ([:tonum [:pick $t 3 5]] * 60)) + [:tonum [:pick $t 6 8]]) }
+:put ("Download test (" . ($size / 1000000) . " MB)...")
+:local t0 [$toSec [/system clock get time]]
+/tool fetch url=("http://" . $host . "/download\?size=" . $size) keep-result=no
+:local s ([$toSec [/system clock get time]] - $t0)
+:if ($s < 0) do={ :set s ($s + 86400) }
+:if ($s < 1) do={ :set s 1 }
+:local kbps (($size * 8) / ($s * 1000))
+:local dec [:tostr (($kbps % 1000) / 10)]
+:if ([:len $dec] < 2) do={ :set dec ("0" . $dec) }
+:put ("Download: " . ($kbps / 1000) . "." . $dec . " Mbps (" . $s . " detik)")
+}
+```
+
+Contoh hasil (v7):
 
 ```
 Download test (25 MB)...
@@ -91,8 +114,9 @@ Download: 66.66 Mbps (3000 ms)
 Catatan:
 - Hanya tes **download**, **1 koneksi**. Hasilnya biasanya lebih rendah dari script lengkap yang pakai beberapa koneksi paralel.
 - Kecepatan dihitung dari ukuran file dibagi lama fetch, jadi trafik klien lain tidak ikut terhitung.
-- Di link lambat, 25 MB bisa makan waktu lama. Kecilkan `size`, misalnya `10000000` (10 MB).
-- Butuh RouterOS v7 yang punya `:timestamp` dan `:tonsec`. Kalau muncul `bad command name`, pakai script lengkap versi v6.
+- Default `size`: 25 MB di v7, 100 MB di v6. Di link lambat bisa makan waktu lama, kecilkan `size`, misalnya `10000000` (10 MB).
+- Versi v7 butuh `:timestamp` dan `:tonsec`. Kalau muncul `bad command name`, pakai versi v6.
+- Versi v6 mengukur waktu pakai jam router, presisinya per detik. Karena itu `size`-nya dibuat lebih besar (100 MB) supaya hasilnya lebih akurat.
 
 ### Jalan otomatis (scheduler)
 
