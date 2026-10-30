@@ -44,7 +44,13 @@ Kalau versi v7 memunculkan `bad command name timestamp`, berarti router masih v6
 Contoh tampilan (ilustrasi, angkanya karangan):
 
 ```
-   Speedtest (RouterOS script, server Ookla)
+    ###  ####  ##### ##### ####  ##### #####  ###  #####
+   #     #   # #     #     #   #   #   #     #       #
+    ###  ####  ####  ####  #   #   #   ####   ###    #
+       # #     #     #     #   #   #   #         #   #
+   ####  #     ##### ##### ####    #   ##### ####    #
+
+   Speedtest for MikroTik RouterOS v7 - using Ookla servers
 
       Server: PT. Telekomunikasi Indonesia - Jakarta
          ISP: PT Telekomunikasi Indonesia

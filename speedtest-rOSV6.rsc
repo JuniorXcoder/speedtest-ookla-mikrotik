@@ -159,8 +159,21 @@
 }
 
 :do {
+  # Banner (warna cyan kalau liveBar aktif)
+  :local cOn ""
+  :local cOff ""
+  :if ($liveBar) do={
+    :set cOn "\1B[36;1m"
+    :set cOff "\1B[0m"
+  }
   :put ""
-  :put "   Speedtest (RouterOS v6 script, server Ookla)"
+  :put ($cOn . "    ###  ####  ##### ##### ####  ##### #####  ###  #####")
+  :put "   #     #   # #     #     #   #   #   #     #       #"
+  :put "    ###  ####  ####  ####  #   #   #   ####   ###    #"
+  :put "       # #     #     #     #   #   #   #         #   #"
+  :put ("   ####  #     ##### ##### ####    #   ##### ####    #" . $cOff)
+  :put ""
+  :put "   Speedtest for MikroTik RouterOS v6 - using Ookla servers"
   :put ""
 
   # Progress bar jalan di tempat pakai kode ANSI di awal baris:
