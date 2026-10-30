@@ -155,18 +155,21 @@
   :local up "\1B[1A\1B[2K\r"
   :local pre ""
 
-  # Fungsi ping dibuat lewat :parse supaya beda versi RouterOS tetap aman
-  :local pingFn
-  :local canPing false
-  :do {
-    :set pingFn [:parse ":local r \"\"; /tool flood-ping address=\$ip count=1 do={ :if (\$received > 0) do={ :set r \$\"avg-rtt\" } }; :return \$r"]
-    :set canPing true
-  } on-error={
-    :do {
-      :set pingFn [:parse ":local r \"\"; :local x [/tool flood-ping address=\$ip count=1 as-value]; :if ((\$x->\"received\") > 0) do={ :set r (\$x->\"avg-rtt\") }; :return \$r"]
-      :set canPing true
-    } on-error={}
+  # Ping dijalankan sebagai job background supaya output flood-ping
+  # (sent/received/min-rtt...) tidak tercetak dan merusak progress bar.
+  # Hasil RTT dikirim balik lewat variabel global speedtestRtt.
+  :local pingFn do={
+    :global speedtestRtt
+    :set speedtestRtt ""
+    :execute (":global speedtestRtt; /tool flood-ping address=" . $ip . " count=1 do={ :if (\$received > 0) do={ :set speedtestRtt \$\"avg-rtt\" } }")
+    :local w 0
+    :while (([:len [:tostr $speedtestRtt]] = 0) && ($w < 12)) do={
+      :delay 100ms
+      :set w ($w + 1)
+    }
+    :return $speedtestRtt
   }
+  :local canPing true
 
   # Interface WAN
   :local wan $wanIface
@@ -509,4 +512,5 @@
 :foreach j in=$allJobs do={ :do { /system script job remove $j } on-error={} }
 :do { /system script environment remove [find where name="speedtestRun"] } on-error={}
 :do { /system script environment remove [find where name="speedtestPayload"] } on-error={}
+:do { /system script environment remove [find where name="speedtestRtt"] } on-error={}
 }
