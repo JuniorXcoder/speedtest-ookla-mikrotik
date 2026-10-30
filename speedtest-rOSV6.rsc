@@ -276,23 +276,30 @@
     } on-error={}
   }
 
-  # Siapkan URL dan data upload (64 KB)
+  # Siapkan URL dan data upload. Batas ukuran http-data di /tool fetch
+  # beda-beda tiap router, jadi coba dari 64 KB turun sampai 1 KB.
   :local upSrc ""
   :local full "0123456789abcdef"
   :do {
     :for k from=1 to=12 do={ :set full ($full . $full) }
   } on-error={}
-  :local upTry ("http://" . $srvHost . "/upload")
-  :do {
-    :local r [/tool fetch url=$upTry http-method=post http-data=$full keep-result=no as-value]
-    :set upSrc $upTry
-  } on-error={
-    :do {
-      :local r [/tool fetch url=$legacyUrl http-method=post http-data=$full keep-result=no as-value]
-      :set upSrc $legacyUrl
-    } on-error={}
+  :local upUrls [:toarray ""]
+  :set upUrls ($upUrls, ("http://" . $srvHost . "/upload"))
+  :set upUrls ($upUrls, $legacyUrl)
+  :foreach sz in={65536;32768;16384;8192;4096;1024} do={
+    :if (($upSrc = "") && ([:len $full] >= $sz)) do={
+      :local d [:pick $full 0 $sz]
+      :foreach u in=$upUrls do={
+        :if ($upSrc = "") do={
+          :do {
+            :local r [/tool fetch url=$u http-method=post http-data=$d keep-result=no as-value]
+            :set upSrc $u
+            :set speedtestPayload $d
+          } on-error={}
+        }
+      }
+    }
   }
-  :set speedtestPayload $full
   :set full ""
 
   # Download lalu upload
@@ -306,7 +313,7 @@
     }
     :set ($res->$ph) -1
     :if ($src = "") do={
-      :put ($label . ":      gagal (server menolak request)")
+      :put ($label . ":      gagal (fetch ke server gagal)")
     } else={
       :local wSrc ""
       :if ($ph = "down") do={

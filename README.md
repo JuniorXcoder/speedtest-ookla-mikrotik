@@ -199,7 +199,7 @@ RouterOS v6 tidak punya `:timestamp` dan `:deserialize`, jadi versi v6 lebih sed
 | `Versi v6 butuh server manual` | Isi `serverHost` di script v6, lihat [Cara cari `serverHost`](#cara-cari-serverhost). |
 | `Gagal resolve ...` | DNS router bermasalah atau nama server salah. Cek `/ip dns`, atau ganti `serverHost`. |
 | `Idle Latency: n/a` | Server tidak membalas ping. Download/upload tetap diukur. |
-| `gagal (server menolak request)` | Server tidak mendukung endpoint download/upload. Coba server lain. |
+| `gagal (fetch ke server gagal)` | `/tool fetch` di router gagal mengirim request ke server (kemungkinan batas ukuran data upload, atau server memang menolak). Coba server lain dari [Cara cari `serverHost`](#cara-cari-serverhost). |
 | Winbox ketendang saat tes | CPU router mentok. Kurangi `streams` dan `testDur`. |
 
 ## Alternatif
