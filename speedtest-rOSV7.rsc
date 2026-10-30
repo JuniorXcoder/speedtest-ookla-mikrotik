@@ -24,7 +24,7 @@
 # Pemanasan sebelum mulai dihitung (tidak masuk hasil)
 :local warmup 2s
 # Kata kunci server, contoh "Surabaya" (tanpa spasi). "" = otomatis
-:local serverSearch ""
+:local serverSearch "Jakarta"
 # Progress bar jalan di tempat (true). Set false kalau terminal
 # menampilkan karakter aneh seperti [1A[2K
 :local liveBar true

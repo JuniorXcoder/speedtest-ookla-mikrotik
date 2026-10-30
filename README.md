@@ -137,7 +137,7 @@ Semua pengaturan ada di bagian `PENGATURAN` di awal script.
 | `testDur`      | `10s`      | `10`       | Lama pengukuran download dan upload. Di v6 ditulis dalam detik, angka saja. |
 | `warmup`       | `2s`       | `2s`       | Pemanasan sebelum mulai dihitung. |
 | `liveBar`      | `true`     | `true`     | Progress bar jalan di tempat (pakai kode ANSI). Set `false` kalau terminal menampilkan karakter aneh seperti `[1A[2K`. |
-| `serverSearch` | `""`       | —          | (v7 saja) Kata kunci kota/server (tanpa spasi), dipakai kalau `serverHost` kosong. |
+| `serverSearch` | `"Jakarta"` | —         | (v7 saja) Kata kunci kota/server (tanpa spasi), dipakai kalau `serverHost` kosong. |
 | `serverHost`   | `jakarta2.speedtest.telkom.net.id:8080` | sama | Server Ookla manual (`host:port`). Di v7 boleh dikosongkan untuk pilih otomatis, di v6 **wajib** diisi. |
 | `serverName`   | `PT. Telekomunikasi Indonesia - Jakarta` | sama | Nama server untuk ditampilkan. |
 | `serverUrl`    | `http://.../speedtest/upload.php` | sama | URL legacy server, dipakai sebagai cadangan. |
