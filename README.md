@@ -2,6 +2,8 @@
 
 Speedtest ala Ookla yang jalan langsung di router MikroTik, murni pakai script RouterOS (tanpa container). Mengukur ping, jitter, download, upload, dan packet loss ke server Ookla, dengan tampilan mirip Ookla Speedtest CLI.
 
+> **Catatan:** proyek komunitas, tidak berafiliasi dengan atau didukung oleh Ookla. Script ini hanya memakai server publik Ookla untuk pengukuran.
+
 > **Status:** belum dites di router asli. Kalau ketemu error, buka issue dan sertakan output script + `/system resource print`.
 
 ## Pilih versi
@@ -44,11 +46,11 @@ Kalau versi v7 memunculkan `bad command name timestamp`, berarti router masih v6
 Contoh tampilan (ilustrasi, angkanya karangan):
 
 ```
-    ###  ####  ##### ##### ####  ##### #####  ###  #####
-   #     #   # #     #     #   #   #   #     #       #
-    ###  ####  ####  ####  #   #   #   ####   ###    #
-       # #     #     #     #   #   #   #         #   #
-   ####  #     ##### ##### ####    #   ##### ####    #
+    ###   ###  #   # #      ###
+   #   # #   # #  #  #     #   #
+   #   # #   # ###   #     #####
+   #   # #   # #  #  #     #   #
+    ###   ###  #   # ##### #   #
 
    Speedtest for MikroTik RouterOS v7 - using Ookla servers
 

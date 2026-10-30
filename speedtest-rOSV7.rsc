@@ -145,7 +145,7 @@
 }
 
 :do {
-  # Banner (warna cyan kalau liveBar aktif)
+  # Banner OOKLA (warna cyan kalau liveBar aktif)
   :local cOn ""
   :local cOff ""
   :if ($liveBar) do={
@@ -153,11 +153,11 @@
     :set cOff "\1B[0m"
   }
   :put ""
-  :put ($cOn . "    ###  ####  ##### ##### ####  ##### #####  ###  #####")
-  :put "   #     #   # #     #     #   #   #   #     #       #"
-  :put "    ###  ####  ####  ####  #   #   #   ####   ###    #"
-  :put "       # #     #     #     #   #   #   #         #   #"
-  :put ("   ####  #     ##### ##### ####    #   ##### ####    #" . $cOff)
+  :put ($cOn . "    ###   ###  #   # #      ###")
+  :put "   #   # #   # #  #  #     #   #"
+  :put "   #   # #   # ###   #     #####"
+  :put "   #   # #   # #  #  #     #   #"
+  :put ("    ###   ###  #   # ##### #   #" . $cOff)
   :put ""
   :put "   Speedtest for MikroTik RouterOS v7 - using Ookla servers"
   :put ""
